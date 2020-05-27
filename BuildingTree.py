@@ -17,7 +17,6 @@ def EditDistance(seq1, seq2) :
 			S[i][j] = min ((S[i-1][j-1] + int(s)), S[i][j-1] + 1, S[i-1][j] + 1)
 	return S[len(seq2)][len(seq1)]
 
-
 def BuildTree(sequences, dist_function=EditDistance):
 	#function spans a tree depending on editional distances
 	#based on Prim's Algorithm for fiding minimum spanning tree
@@ -36,7 +35,6 @@ def BuildTree(sequences, dist_function=EditDistance):
 					cost.append([dist_function(source, sequences[s])])
 				else:
 					cost[leaf].append(dist_function(source, sequences[s]))
-
 	for leaf in range(len(sequences)):
 		memory.append(source)
 		mini = float("inf")
@@ -48,30 +46,26 @@ def BuildTree(sequences, dist_function=EditDistance):
  				mini = mloc #minimal editing distance
  				leaf_initial = cost[i].index(mini)
  				father = i
- 		
  		source = sequences[leaf_initial]
  		MST[source] = [mini]
  		for key in MST.keys():
  			if key == memory[father]:
  				MST[key].append(source)
-
  		#remove used vertex
  		for i in range(leaf + 1):
  			del cost[i][leaf_initial]
  		del sequences[leaf_initial]
-
  		#update costs
 		for s in range(len(sequences)):
 			if len(cost) < leaf + 2:
 				cost.append([dist_function(source, sequences[s])])
 			else:
 				cost[leaf + 1].append(dist_function(source, sequences[s]))
-
 	spanTree = PhylTree(grow(MST, root))
  	return spanTree
 
 def grow(MST, root):
-	#bedzie zwracało Nody
+	#returns nodes from picked root
 	values = MST[root]
 	node = PhylNode(values[0], root)
 	if len(values) != 1:
@@ -81,7 +75,6 @@ def grow(MST, root):
 
 
 class PhylNode:
-
 	def __init__(self, distance=None, sequence=None, children=None):
 		self.distance = distance
 		self.sequence = sequence
@@ -107,11 +100,11 @@ class PhylNode:
 		return self.distance
 
 	def get_children_str(self):
-		ch = ""
+		ch_str = ""
 		if self.children != None:
 			for child in self.children:
-				ch+=(child.__str__())
-		return ch
+				ch_str+=(child.__str__())
+		return ch_str
 
 	def get_children(self):
 		if self.children != None:
@@ -130,7 +123,6 @@ class PhylNode:
 			for child in self.children:
 				ch += child.toString(i)
 			i-=1
-
 		return "\t"*i + "/_" + str(self.get_distance()) + "_" + str(self.get_sequence())+ "\n" + ch
 
 	def sumdistNode(self, suma=0):
